@@ -5,12 +5,10 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-
 import AppiumUtilityPkg.AndroidUtils;
-import AppiumUtilityPkg.BasePage;
 import io.appium.java_client.android.AndroidDriver;
 
-public class ProductPage extends BasePage
+public class ProductPage extends AndroidUtils
 {
 
 	public WebElement elem;
@@ -43,7 +41,7 @@ public class ProductPage extends BasePage
      int size = elements.size();
      System.out.println("Product Found: "+size);
      au.UseScrollUptoDesiredTextByAndroidUIAutomatorGesture(prodname);
-     adriver.wait(2000);
+     PauseDriver(5000);
      elem = getWebElement(By.xpath("//android.widget.TextView[@resource-id='com.androidsample.generalstore:id/productName' and @text='"+prodname+"']/..//android.widget.TextView[@resource-id='com.androidsample.generalstore:id/productAddCart']"));
      elem.click();
      System.out.println("Added Product in Cart : "+prodname);
@@ -53,7 +51,7 @@ public class ProductPage extends BasePage
     {
      elem = getWebElement(ClickCartIconElem);
      elem.click();
-     adriver.wait(2000);
+     PauseDriver(2000);
      System.out.println("Cart Button is clicked");
      
      return new CartPage(adriver);

@@ -8,8 +8,10 @@ import java.time.Duration;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 
 import AndroidPageFactory.FormPage;
+import AppiumUtilityPkg.AndroidUtils;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -18,9 +20,9 @@ import io.appium.java_client.service.local.AppiumServiceBuilder;
 public class AndroidTestBase 
 {
 
-	public AndroidDriver adriver;
+	public AndroidDriver driver;
 	public AppiumDriverLocalService aservice;
-	public String appiumServerPort  = "http://192.168.1.80:4723/";
+	public String appiumServerPort  = "http://192.168.65.1:4723/";
     public FormPage fp;
 	
 	@BeforeClass
@@ -33,27 +35,34 @@ public class AndroidTestBase
 		
 		UiAutomator2Options optn = new UiAutomator2Options();
 		
-	/*	optn.setDeviceName("Pixel 8 API 31"); // Emulator Device Name
-		optn.setApp("F:\\SHIV NEWSCRIPTS\\AppiumBasicProject\\src\\main\\java\\ConfigPkg\\ApiDemos-debug.apk");
-	*/	
+	//	optn.setDeviceName("Pixel 8 API 31"); // Emulator Device Name
+	//	optn.setApp("F:\\SHIV NEWSCRIPTS\\AppiumBasicProject\\src\\main\\java\\ConfigPkg\\ApiDemos-debug.apk");
+		
 		optn.setDeviceName("Pixel 2 Orieo"); // Emulator Device Name
-		optn.setApp("F:\\SHIV NEWSCRIPTS\\AppiumBasicProject\\src\\main\\java\\ConfigPkg\\General-Store.apk");
-				
+		optn.setApp("F:\\SHIV NEWSCRIPTS\\AppiumMavenProject\\src\\main\\java\\ConfigPkg\\General-Store.apk");
 		optn.setAutomationName("UiAutomator2");
 		optn.setPlatformName("ANDROID");
 		
 		
-		adriver = new AndroidDriver(new URI(appiumServerPort).toURL(),optn);
+		driver = new AndroidDriver(new URI(appiumServerPort).toURL(),optn);
 	
-	    adriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(25));
+	    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(25));
 	    
-	    fp = new FormPage(adriver);
+	    fp = new FormPage(driver);
 	}
+	
+	@BeforeMethod
+	public void getBackToLoginPage()
+	{
+		AndroidUtils au = new AndroidUtils(driver);
+		au.UserStartAppActivity("com.androidsample.generalstore/com.androidsample.generalstore.SplashActivity");
+	}
+	
 	
 	@AfterClass
 	public void closeServerServices() 
 	{
-		adriver.quit();
+		driver.quit();
 		
 		aservice.stop();
 	}

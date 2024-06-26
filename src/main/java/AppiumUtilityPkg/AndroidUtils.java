@@ -1,20 +1,25 @@
 package AppiumUtilityPkg;
 
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebElement;
 
 import com.google.common.collect.ImmutableMap;
-
+import org.openqa.selenium.remote.RemoteWebElement;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 
-public class AndroidUtils extends BasePage
+public class AndroidUtils extends AppiumUtilPage
 {
-	public AndroidUtils(AndroidDriver adriver) 
-	{
-		super(adriver);
+
+	public static AndroidDriver adriver;
+	public AndroidUtils(AndroidDriver driver) {
+		super(driver);
+		adriver = driver;
+		jsExec = ((JavascriptExecutor) adriver);
 	}
+
+
 	
 	 /* In order to view mobile gesture Serach Mobile Gesture in appium Click on first git hub link  
 	  * (Or)   Go to below Url

@@ -1,24 +1,29 @@
 package AndroidPageFactory;
 
+import java.util.List;
+import java.util.ListIterator;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.testng.Assert;
 import org.testng.Reporter;
+
 import AppiumUtilityPkg.AndroidUtils;
-import AppiumUtilityPkg.BasePage;
+
 import io.appium.java_client.android.AndroidDriver;
 
-public class FormPage extends BasePage
+public class FormPage extends AndroidUtils
 {
+  
+	public FormPage(AndroidDriver driver) {
+		super(driver);
+		// TODO Auto-generated constructor stub
+	}
 
 	public WebElement elem;
-	AndroidUtils au = new AndroidUtils(adriver);
-	
-	public FormPage(AndroidDriver adriver) {
-		super(adriver);
+	public List<WebElement> elements;
 		
-	//	PageFactory.initElements(new AppiumFieldDecorator(adriver), this);
-		
-	}
+    AndroidUtils au = new AndroidUtils(adriver);
 	
 	private By SelectCountryElem = By.xpath("//android.widget.TextView[@resource-id='android:id/text1']");
 		
@@ -26,7 +31,9 @@ public class FormPage extends BasePage
 	
 	private By ClickLetsShopElem = By.id("com.androidsample.generalstore:id/btnLetsShop");
 	
-	public void SetName(String name)
+	private By GetErrorMessageElem = By.xpath("(//android.widget.Toast)[1]");
+	
+	public void SetName(String name) throws InterruptedException
 	{
 	 elem = getWebElement(EnterYourNameElem);
 	 elem.sendKeys(name);
@@ -57,26 +64,41 @@ public class FormPage extends BasePage
 	   elem.click(); 
 	   
 	   au.UseScrollUptoDesiredTextByAndroidUIAutomatorGesture(country);
-	   adriver.wait(2000);
+	   PauseDriver(8000);
 	   
 	   elem = getWebElement(By.xpath("//android.widget.TextView[@resource-id='android:id/text1' and @text='"+country+"']"));
 	   elem.click();
+	   PauseDriver(4000);
 	   System.out.println("Selected Country: "+country);
 	   Reporter.log("GetSelectCountry: "+country);
 
+	 }
+	 
+	 public void GetnVerifyErrorMessage(String expmsg)
+	 {
+	  elem = getWebElement(GetErrorMessageElem);
+	  String actmsg = elem.getAttribute("name");
+	  System.out.println("Actual Error Message: "+actmsg);
+	  Assert.assertEquals(expmsg, actmsg,"Error toast message is not matched");
 	 }
 	 
 	 public ProductPage ClickLetsShopButton() throws InterruptedException
 	 {
 	  elem = getWebElement(ClickLetsShopElem); 
 	  elem.click();
-	  System.out.println("Lets shop button is clicked");
-	  adriver.wait(2000);
+	  System.out.println("Lets shop button is clicked");	  
 	  Reporter.log("ClickLetsShopButton");
 	  
 	  return new ProductPage(adriver);
-	  
-	  
+	  	  
+	 }
+	 
+	 public void NoErrorToastMessageDisplayed(int esize)
+	 {
+	  elements = getWebElements(GetErrorMessageElem); 
+	  int size = elements.size();
+	  System.out.println("ElementSize: "+size);	 
+	  Assert.assertEquals(size, esize,"Element size is not matched");	 
 	 }
       	 
 	
