@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 import AndroidPageFactory.CartPage;
 import AndroidPageFactory.FormPage;
 import AndroidPageFactory.ProductPage;
-import AppiumTestPkg.AndroidTestBase;
+import AppiumTestUtilsPkg.AndroidTestBase;
 import AppiumUtilityPkg.AndroidUtils;
 
 import io.appium.java_client.android.AndroidDriver;

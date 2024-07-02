@@ -1,4 +1,4 @@
-package AppiumTestPkg;
+package AppiumTestUtilsPkg;
 
 public class IOSTestBase {
 

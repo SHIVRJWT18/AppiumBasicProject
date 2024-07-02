@@ -1,20 +1,19 @@
 package GenStoreEcomTestcase;
 
+
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import AndroidPageFactory.CartPage;
 import AndroidPageFactory.FormPage;
-import AndroidPageFactory.ProductPage;
-import AppiumTestPkg.AndroidTestBase;
-import AppiumUtilityPkg.AndroidUtils;
+import AppiumTestUtilsPkg.AndroidTestBase;
 
-import io.appium.java_client.android.AndroidDriver;
 
 public class AndroidTestcase_1 extends AndroidTestBase
 {
 
 
-	@Test
+
+	@Test(priority=1)
 	public void purchaseproduct() throws InterruptedException
 	{
 	 FormPage fp = new FormPage(driver);
@@ -29,10 +28,11 @@ public class AndroidTestcase_1 extends AndroidTestBase
 	}
 	
 	
-	@Test
+	@Test(priority=2)
 	public void GetnVerifyErrorToastMessage() throws InterruptedException
 	{
 	 FormPage fp = new FormPage(driver);
+	 fp.SetName("");
 	 fp.SelectGender("Female");
 	 fp.GetSelectCountry("Australia");
 	 fp.ClickLetsShopButton();	

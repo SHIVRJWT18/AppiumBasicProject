@@ -1,41 +1,46 @@
 package GenStoreEcomTestcase;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import AndroidPageFactory.CartPage;
 import AndroidPageFactory.FormPage;
 import AndroidPageFactory.ProductPage;
-import AppiumTestPkg.AndroidTestBase;
-import AppiumUtilityPkg.AndroidUtils;
+import AppiumTestUtilsPkg.AndroidTestBase;
 
-import io.appium.java_client.android.AndroidDriver;
 
 public class DataproviderAndroidTestcase_3 extends AndroidTestBase
 {
 
 
-	@Test
-	public void purchaseproduct() throws InterruptedException
+
+	@Test(dataProvider = "FillData")
+	public void purchaseproduct(String custname,String custgen,String custcountry) throws InterruptedException
 	{
 	 FormPage fp = new FormPage(driver);
 	 
-	 fp.SetName("Abhishek Singh");
-	 fp.SelectGender("Female");
-	 fp.GetSelectCountry("Bhutan");
-	 fp.ClickLetsShopButton();
-     fp.NoErrorToastMessageDisplayed(0);
+	 fp.SetName(custname);
+	 fp.SelectGender(custgen);
+	 fp.GetSelectCountry(custcountry);
+	 ProductPage Pp = fp.ClickLetsShopButton();
+	 
+	 Pp.GetnVerifyPageTitle("Products");
+	 Pp.AddProductToCart("Air Jordan 9 Retro");
+	 Pp.AddProductToCart("Nike SFB Jungle");
+	 CartPage Cp = Pp.ClickCartButton();
+	 
+	 Cp.GetnVerifyPageTitle("Cart");
+	 Cp.GetnVerifyPayablePrice();
+	 Cp.ClickTermsAndCondition();
+	 Cp.ClickVisitToWebsiteToCompletePurchaseElem();
 	 
 		 
 	}
 	
+    @DataProvider
+    public Object[][] FillData()
+    {
+     return new Object[][] {{"Kirti Kumari","Female","Australia"},{"Kapil Kumar","Male","Bangladesh"}};	
+    }
 	
-	@Test
-	public void GetnVerifyErrorToastMessage() throws InterruptedException
-	{
-	 FormPage fp = new FormPage(driver);
-	 fp.SelectGender("Female");
-	 fp.GetSelectCountry("Australia");
-	 fp.ClickLetsShopButton();	
-	 fp.GetnVerifyErrorMessage("Please enter your name");
-	}
+
 }

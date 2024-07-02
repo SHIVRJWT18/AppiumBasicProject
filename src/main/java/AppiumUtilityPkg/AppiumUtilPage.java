@@ -1,5 +1,6 @@
 package AppiumUtilityPkg;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -11,12 +12,24 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.service.local.AppiumDriverLocalService;
+import io.appium.java_client.service.local.AppiumServiceBuilder;
+import net.bytebuddy.jar.asm.TypeReference;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -33,15 +46,33 @@ public class AppiumUtilPage {
 	public ArrayList Aryl;
 	public String Filepath = "C:\\Users\\Administrator\\Downloads";
 	
-    public static JavascriptExecutor jsExec;
+    public JavascriptExecutor jsExec;
 
 	public AppiumUtilPage(AppiumDriver driver)
 	{
 		appiumdriver=driver;
 		jsExec = ((JavascriptExecutor) appiumdriver);
 	}
+	
+	public AppiumDriverLocalService StartAppiumService(String appiumserverIp,int appiumserverPort)
+	{
+	 AppiumDriverLocalService aservice = new AppiumServiceBuilder().withAppiumJS(new File("C:\\Users\\Dell\\AppData\\Roaming\\npm\\node_modules\\appium\\build\\lib\\main.js"))
+				.withIPAddress(appiumserverIp).usingPort(appiumserverPort).build();
+		
+	 aservice.start();
+	 return aservice;
+	}
+	
+	public AppiumDriverLocalService StopAppiumService(String appiumserverIp,int appiumserverPort)
+	{
+	 AppiumDriverLocalService aservice = new AppiumServiceBuilder().withAppiumJS(new File("C:\\Users\\Dell\\AppData\\Roaming\\npm\\node_modules\\appium\\build\\lib\\main.js"))
+				.withIPAddress(appiumserverIp).usingPort(appiumserverPort).build();
+		
+	 aservice.stop();
+	 return aservice;
+	}
 
-    protected WebElement getWebElement(WebElement elem, final By by)
+    public WebElement getWebElement(WebElement elem, final By by)
     {
      waitForLoaded(elem, by, 5);
      
@@ -50,7 +81,7 @@ public class AppiumUtilPage {
      return elem.findElement(by);
     }
 
-    protected List<WebElement> getWebElements(final By by)
+    public List<WebElement> getWebElements(final By by)
     {
      waitForLoaded(by, 2);
      
@@ -65,9 +96,20 @@ public class AppiumUtilPage {
             return null;
      }
     }
-
+    
+	public List<HashMap<String,String>> GetJsonData(String Filepath) throws IOException    
+    {
+     File f = new File(Filepath);
+     String jsoncontent = FileUtils.readFileToString(f,StandardCharsets.UTF_8);
+     ObjectMapper om = new ObjectMapper();
+     List<HashMap<String,String>> data = om.readValue(jsoncontent, 
+          new com.fasterxml.jackson.core.type.TypeReference<List<HashMap<String,String>>>() {});
+    		  
+     return data;
+     }
+	
     @SuppressWarnings("deprecation")
-	protected void waitForLoaded(WebElement elem, final By by, int waitTime) 
+	public void waitForLoaded(WebElement elem, final By by, int waitTime) 
     {
      for (int attempt = 0; attempt < waitTime; attempt++) 
      {
@@ -83,7 +125,7 @@ public class AppiumUtilPage {
      }
     }
 
-    protected void waitForVisible(WebElement selem, final By by, int waitTime)
+    public void waitForVisible(WebElement selem, final By by, int waitTime)
     {
      try 
      {
@@ -103,7 +145,7 @@ public class AppiumUtilPage {
      }
     }
 
-    protected WebElement getWebElement(final By by)
+    public WebElement getWebElement(final By by)
     {
      waitForLoaded(by, 5);
         
@@ -120,7 +162,7 @@ public class AppiumUtilPage {
     }
 
     @SuppressWarnings("deprecation")
-	protected void waitForLoaded(final By by, int waitTime) 
+	public void waitForLoaded(final By by, int waitTime) 
     {
      for (int attempt = 0; attempt < waitTime; attempt++) 
      {
@@ -136,7 +178,7 @@ public class AppiumUtilPage {
      }  
     }
 
-    protected void waitForVisible(final By by, int waitTime)
+    public void waitForVisible(final By by, int waitTime)
     {
      try 
      {
@@ -444,7 +486,5 @@ public class AppiumUtilPage {
             e.printStackTrace();
      }
     }
-    
-    
     
     }

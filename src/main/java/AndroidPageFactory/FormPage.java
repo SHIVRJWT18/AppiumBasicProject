@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.Reporter;
 
 import AppiumUtilityPkg.AndroidUtils;
-
+import io.appium.java_client.android.Activity;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.nativekey.AndroidKey;
+import io.appium.java_client.android.nativekey.KeyEvent;
 
 public class FormPage extends AndroidUtils
 {
@@ -36,6 +39,7 @@ public class FormPage extends AndroidUtils
 	public void SetName(String name) throws InterruptedException
 	{
 	 elem = getWebElement(EnterYourNameElem);
+	 elem.sendKeys(Keys.CONTROL + "a",Keys.DELETE);
 	 elem.sendKeys(name);
 	 adriver.hideKeyboard();
 	 System.out.println("Entered Name: "+name);
@@ -88,7 +92,7 @@ public class FormPage extends AndroidUtils
 	  elem.click();
 	  System.out.println("Lets shop button is clicked");	  
 	  Reporter.log("ClickLetsShopButton");
-	  
+	  PauseDriver(3000);
 	  return new ProductPage(adriver);
 	  	  
 	 }
@@ -100,7 +104,14 @@ public class FormPage extends AndroidUtils
 	  System.out.println("ElementSize: "+size);	 
 	  Assert.assertEquals(size, esize,"Element size is not matched");	 
 	 }
-      	 
-	
+	 
+	 public void PreScreenSetUp() throws InterruptedException
+	 {
+	  adriver.pressKey(new KeyEvent(AndroidKey.BACK));
+			
+	  Thread.sleep(2500);
+	  
+	  System.out.println("Start activity started");	
+	 }
 
 }

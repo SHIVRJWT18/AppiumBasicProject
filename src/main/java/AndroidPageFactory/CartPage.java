@@ -1,6 +1,7 @@
 package AndroidPageFactory;
 
 import java.util.List;
+import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -8,6 +9,8 @@ import org.testng.Assert;
 
 import AppiumUtilityPkg.AndroidUtils;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.nativekey.AndroidKey;
+import io.appium.java_client.android.nativekey.KeyEvent;
 
 public class CartPage extends AndroidUtils
 {
@@ -100,12 +103,9 @@ public class CartPage extends AndroidUtils
     {
      elem = getWebElement(SendEmailCheckboxElem);	
      elem.click();
-     
-     PauseDriver(2000);
      elem = getWebElement(VisitToWebsiteToCompletePurchaseElem);
      elem.click();
      System.out.println("Purchase link is click successfully!");
-     
-     
+     Thread.sleep(4000);
     }
 }
